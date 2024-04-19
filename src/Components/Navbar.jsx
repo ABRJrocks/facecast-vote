@@ -10,7 +10,7 @@ const Navbar = () => {
       <header className="bg-regal-blue-700 text-regal-blue-50 sticky top-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between py-2 md:py-2">
-            <h1 className="text-xl md:text-2xl font-semibold">Logo</h1>
+            <h1 className="text-xl md:text-2xl font-semibold">FaceCast Vote</h1>
             <nav className="hidden md:flex md:items-center space-x-6 text-base font-medium">
               <a href="#" className="hover:opacity-90">Home</a>
               <a href="#" className="hover:opacity-90">About</a>
