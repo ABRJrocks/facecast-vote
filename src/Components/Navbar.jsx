@@ -63,7 +63,7 @@ const Navbar = () => {
               <Link to="/vote" className="hover:opacity-90">
                 VoteNow
               </Link>
-              <DropDown />
+              <DropDown title={'More'}/>
               <div className="flex gap-2">
                 {/* <DropDown title={'Muhammd Saad'} type={"userAccount"}/> */}
                 <button className="bg-regal-blue-900 text-regal-blue-50 px-3 py-2  rounded-md hover:bg-regal-blue-900/80">
