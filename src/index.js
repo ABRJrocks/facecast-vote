@@ -12,6 +12,8 @@ import {
 import ElectionsScreen from './Screeens/ElectionsScreen';
 import OpenElections from './Screeens/OpenElections';
 import RegisterScreen from './Screeens/RegisterScreen';
+import CandidatesScreen from './Screeens/CandidatesScreen';
+import PartiesScreen from './Screeens/PartiesScreen';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -19,6 +21,8 @@ const router = createBrowserRouter(
       <Route index={true} path="/" element={<ElectionsScreen />} />
       <Route path="/vote" element={<OpenElections />} />
       <Route path="/register" element={<RegisterScreen />} />
+      <Route path="/candidates" element={<CandidatesScreen />} />
+      <Route path="/parties" element={<PartiesScreen />} />
     </Route>
   )
 );
