@@ -12,14 +12,17 @@ const Navbar = () => {
         <div className="flex items-center justify-between py-2 md:py-2">
           <h1 className="text-xl md:text-2xl font-semibold">FaceCast Vote</h1>
           <nav className="hidden lg:flex lg:items-center space-x-6 text-base font-medium">
-       
-            <Link to="/" className="hover:opacity-90" >Home</Link>
-            <Link to="/vote" className="hover:opacity-90" >VoteNow</Link>
-            <DropDown title={'Archives'}/>
+            <Link to="/" className="hover:opacity-90">
+              Home
+            </Link>
+            <Link to="/vote" className="hover:opacity-90">
+              VoteNow
+            </Link>
+            <DropDown title={"Archives"} />
             <div className="flex gap-2">
               {/* <DropDown title={'Muhammd Saad'} type={"userAccount"}/> */}
               <button className="bg-regal-blue-900 text-regal-blue-50 px-3 py-2 drop-shadow-sm rounded-md hover:bg-regal-blue-900/80">
-                <Link to="/register" >Get Started</Link>
+                <Link to="/register">Get Started</Link>
               </button>
             </div>
           </nav>
@@ -54,23 +57,17 @@ const Navbar = () => {
             aria-label="mobile-menu"
           >
             <div className="flex flex-col items-center text-start space-y-4">
-              <a href="#" className="text-xl  hover:opacity-90">
+              <Link to="/" className="hover:opacity-90">
                 Home
-              </a>
-              <a href="#" className="text-xl  hover:opacity-90">
-                About
-              </a>
-              <a href="#" className="text-xl  hover:opacity-90">
-                Services
-              </a>
-              <a href="#" className="text-xl  hover:opacity-90">
-                Contact
-              </a>
+              </Link>
+              <Link to="/vote" className="hover:opacity-90">
+                VoteNow
+              </Link>
               <DropDown />
               <div className="flex gap-2">
                 {/* <DropDown title={'Muhammd Saad'} type={"userAccount"}/> */}
                 <button className="bg-regal-blue-900 text-regal-blue-50 px-3 py-2  rounded-md hover:bg-regal-blue-900/80">
-                  Get Started
+                  <Link to="/register">Get Started</Link>
                 </button>
               </div>
             </div>
