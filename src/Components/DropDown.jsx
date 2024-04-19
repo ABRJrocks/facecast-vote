@@ -6,24 +6,17 @@ import React from "react";
 
 const menuItems = [
   {
-    label: "Edit",
+    label: "Parties",
   },
   {
-    label: "Duplicate",
+    label: "Elections",
   },
   {
-    label: "Archive",
-  },
-  {
-    label: "Move",
-  },
-  {
-    label: "Delete",
-  },
-  {
-    label: "Delete",
-  },
+    label: "Candidates",
+  }
+
 ];
+
 const DropDown = ({ title, type }) => {
   return (
     <div className="text-right">
