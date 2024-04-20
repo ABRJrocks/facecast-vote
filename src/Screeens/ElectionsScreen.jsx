@@ -1,9 +1,10 @@
 import React from "react";
 import ElectionsDetails from "../Components/ElectionsDetails";
 import Instructions from "../Components/Instructions";
-
+// import axios from 'axios'
 const ElectionsScreen = () => {
-  return (
+
+    return (
     <section className="px-4 py-5 md:py-5">
       <div className="py-5">
         <h1 className="pb-4 text-xl font-medium">Instructions</h1>
