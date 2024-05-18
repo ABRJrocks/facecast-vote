@@ -118,6 +118,7 @@ const VoterLayout = () => {
         </div>
         <div className=" h-44 flex items-center flex-col min justify-center border-2 border-gray-100 rounded-md p-5">
           <MdOutlineHowToVote className="h-20 w-20 text-blue-500 mb-2" />
+          <span className="text-regal-blue-700 text-left py-1">Elections Reports</span>
           <Select
             options={titles}
             value={selectedElection}

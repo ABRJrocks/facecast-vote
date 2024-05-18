@@ -1,11 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useLocation } from "react-router-dom";
 const Footer = () => {
   const { roles } = useAuth();
+  const location = useLocation();
+  const getVoterScreenLocation = location.pathname.includes("/voter/vote");
+  console.log("location", getVoterScreenLocation);
   return (
     <footer class="flex flex-col items-center bg-regal-blue-700 text-center text-white">
-      {roles === "voter" ? (
+      {roles === "voter" && !getVoterScreenLocation ? (
         <div class="container p-6">
           <div class="">
             <p class="flex items-center justify-center">
