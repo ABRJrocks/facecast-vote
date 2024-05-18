@@ -23,6 +23,12 @@ export const generatePDF = async (election) => {
   doc.text("FaceCast Vote Election System", pageWidth / 2, yPos, {
     align: "center",
   });
+  doc.setFontSize(16);
+  doc.setFont("times", "bold");
+  yPos += 10;
+  doc.text(`Election Report ${election.title}`, pageWidth / 2, yPos, {
+    align: "center",
+  });
 
   yPos += 20;
   doc.setFontSize(12);
@@ -131,15 +137,23 @@ export async function generateResultPdf(result) {
   // Set font size and style for table headers
   doc.setFontSize(12);
   doc.setFont("times", "bold");
-
-  // Generate table
-  const tableData = [["Constituency", "Candidate Name", "Votes"]];
+  const tableData = [["Constituency", "Candidate Name", "Votes", "Winner"]];
   result.constituencies.forEach((constituency) => {
-    tableData.push([constituency.name, "", ""]);
+    let maxVotes = 0;
+    let winnerName = "";
     constituency.candidates.forEach((candidate) => {
-      tableData.push(["", candidate.name, candidate.votes]);
+      tableData.push([constituency.name, candidate.name, candidate.votes, ""]);
+      if (candidate.votes > maxVotes) {
+        maxVotes = candidate.votes;
+        winnerName = candidate.name;
+      }
     });
+    // Tag the winner
+    if (winnerName !== "") {
+      tableData[tableData.length - 1][3] = "(Winner)";
+    }
   });
+
 
   // Add table to PDF
   doc.autoTable({
