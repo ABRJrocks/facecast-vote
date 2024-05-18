@@ -50,15 +50,15 @@ const AuthHeaderUser = () => {
     fetchProfile(); // Call fetchProfile function inside useEffect
   }, []);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
+  // const openModal = () => {
+  //   setIsModalOpen(true);
+  // };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+  // const closeModal = () => {
+  //   setIsModalOpen(false);
+  // };
   //   const menuItemsAdminApp = [
   //     {
   //       label: "Elections",
@@ -79,7 +79,7 @@ const AuthHeaderUser = () => {
   //   ];
   return (
     <header className="bg-regal-blue-700 text-regal-blue-50 sticky top-0 z-10">
-      <CryptoWalletModal isOpen={isModalOpen} onClose={closeModal} />
+      {/* <CryptoWalletModal isOpen={isModalOpen} onClose={closeModal} /> */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between py-2 md:py-2">
           <Link to="/">
@@ -102,9 +102,9 @@ const AuthHeaderUser = () => {
 
             {/* <DropDown title={"More"} menuItems={menuItemsAdminApp} /> */}
             <div className="flex gap-4">
-              <button onClick={openModal}>
+              {/* <button onClick={openModal}>
                 <MdOutlineAccountBalanceWallet className="h-6 w-6" />
-              </button>
+              </button> */}
               <DropDown
                 title={profile.fname}
                 type={"userAccount"}
@@ -128,16 +128,16 @@ const AuthHeaderUser = () => {
           >
             {isOpen ? (
               <div className="flex flex-row gap-6 items-center">
-                <button onClick={openModal}>
+                {/* <button onClick={openModal}>
                   <MdOutlineAccountBalanceWallet className="h-6 w-6" />
-                </button>
+                </button> */}
                 <AiOutlineClose className="block h-6 w-6" aria-hidden="true" />
               </div>
             ) : (
               <div className="flex flex-row gap-6 items-center">
-                <button onClick={openModal}>
+                {/* <button onClick={openModal}>
                   <MdOutlineAccountBalanceWallet className="h-6 w-6" />
-                </button>
+                </button> */}
                 <AiOutlineMenu className="block h-6 w-6" aria-hidden="true" />
               </div>
             )}

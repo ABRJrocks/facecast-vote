@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-// import BreadCrumbs from "../../Components/Utils/BreadCrumbs";
 import { useAuth } from "../../context/AuthContext";
 import { setDoc, doc } from "firebase/firestore";
 import Alert from "../../Components/Alert";
@@ -11,13 +10,32 @@ import { BsPersonBoundingBox } from "react-icons/bs";
 import { faceio } from "../../config/faceio";
 import { permissionRef } from "../../config/firebase";
 import { getCollectionById } from "../../utils/globals";
+import { FaInfoCircle } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
+import { FaTimes } from "react-icons/fa";
 import toast from "react-hot-toast";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+
 const SignupLayout = () => {
   const navigate = useNavigate();
   const [signUpAllowed, setSignUpAllowed] = useState(true);
   const { signUp, PERMISSIONSID } = useAuth();
+
+  const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+  const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+  const emailRef = useRef();
+  const pwdRef = useRef();
+
   const [email, setEmail] = useState("");
+  const [validEmail, setValidEmail] = useState(false);
+  const [emailFocus, setEmailFocus] = useState("");
+
   const [password, setPassword] = useState("");
+  const [validPassword, setValidPassword] = useState(false);
+  const [passwordFocus, setPasswordFocus] = useState("");
+
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
   const [cnic, setCninc] = useState("");
@@ -32,6 +50,13 @@ const SignupLayout = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   // const [elections, setElections] = useState([]);
+  useEffect(() => {
+    setValidEmail(EMAIL_REGEX.test(email));
+  }, [email]);
+
+  useEffect(() => {
+    setValidPassword(PWD_REGEX.test(password));
+  }, [password]);
 
   useEffect(() => {
     const fetchPermissions = async () => {
@@ -185,7 +210,6 @@ const SignupLayout = () => {
               class=" mx-auto flex flex-col items-left gap-4"
             >
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-               
                 <div>
                   <label for="name1" class="text-lg font-normal text-slate-900">
                     First name
@@ -229,13 +253,11 @@ const SignupLayout = () => {
                   <label for="name1" class="text-lg font-normal text-slate-900">
                     Phone
                   </label>
-                  <input
-                    type="phone"
-                    id="phone"
-                    name="phone"
+                  <PhoneInput
+                    country={"pk"}
+                    onlyCountries={["pk"]}
                     value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    class="w-full p-1 border border-gray-300 rounded-md"
+                    onChange={(value) => setPhone(value)}
                   />
                 </div>
                 <div>
@@ -282,34 +304,101 @@ const SignupLayout = () => {
                   </div>
                 )}
                 <div>
-                  <label for="name1" class="text-lg font-normal text-slate-900">
+                  <label
+                    for="name1"
+                    class="text-lg font-normal text-slate-900 flex items-center gap-2"
+                  >
                     Email
+                    <span
+                      id="emailnote"
+                      className={validEmail ? "m-2 text-green-600" : "hidden"}
+                    >
+                      <FaCheck />
+                    </span>
+                    <span
+                      id="emailnote"
+                      className={
+                        validEmail || !email ? "hidden" : "text-red-600 m-2"
+                      }
+                    >
+                      <FaTimes />
+                    </span>
                   </label>
                   <input
                     type="email"
-                    id="email"
-                    name="email"
+                    //  className="form-control"
+                    ref={emailRef}
                     value={email}
+                    aria-invalid={validEmail ? "false" : "true"}
+                    aria-describedby="emailnote"
                     onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Please Enter"
+                    onBlur={() => setEmailFocus(false)}
+                    onFocus={() => setEmailFocus(true)}
                     class="w-full p-1 border border-gray-300 rounded-md"
                   />
+                  <p
+                    className={
+                      emailFocus && !validEmail
+                        ? "text-red-600 flex items-center gap-2"
+                        : "hidden"
+                    }
+                  >
+                    <FaInfoCircle className="" />
+                    Invalid Email
+                  </p>
                 </div>
 
                 <div>
                   <label
                     for="password"
-                    class="text-lg font-normal text-slate-900"
+                    class="text-lg font-normal text-slate-900 flex items-center gap-2"
                   >
                     Password
+                    <span
+                      id="uidnote"
+                      className={validPassword ? "text-green-600" : "hidden"}
+                    >
+                      <FaCheck />
+                    </span>
+                    <span
+                      className={
+                        validPassword || !password
+                          ? "hidden"
+                          : "text-red-600 flex items-center gap-2"
+                      }
+                    >
+                      <FaTimes />
+                    </span>
                   </label>
                   <input
                     type="password"
-                    id="password"
-                    name="password"
+                    required
+                    aria-invalid={validPassword ? "false" : "true"}
+                    aria-describedby="pwdnote"
+                    ref={pwdRef}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Please Enter"
+                    onFocus={() => setPasswordFocus(true)}
+                    onBlur={() => setPasswordFocus(false)}
                     class="w-full p-1 border border-gray-300 rounded-md"
                   />
+                  <p
+                    id="pwdnote"
+                    className={
+                      passwordFocus && !validPassword
+                        ? "text-red-600 flex  gap-2"
+                        : "hidden"
+                    }
+                  >
+                    <FaInfoCircle className="w-6 h-6" />
+                    8 to 24 characters.
+                    <br />
+                    Must include uppercase and lowercase letters, a number and a
+                    special character.
+                    <br />
+                  </p>
                 </div>
                 <div>
                   <label
