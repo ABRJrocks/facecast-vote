@@ -1,167 +1,114 @@
-export const parties = [
+export const politicalParties = [
     {
-      name: "Pakistan Tehreek-e-Insaf (PTI)",
-      symbol: "Cricket Bat",
+      id: "1",
+      name: "Pakistan Tehreek-e-Insaf",
+      acronym: "PTI",
       leader: "Imran Khan",
+      foundation_year: 1996,
+      ideology: "Centrism, Populism, Social Conservatism",
+      headquarters: "Islamabad, Pakistan",
       manifesto: "Naya Pakistan Agenda",
-      founded: "April 25, 1996",
-      headquarters: "Islamabad",
-      flags: "Flag of PTI",
-      colors: {
-        name: "Green and Red",
+      symbol_url: "https://example.com/pti-symbol.jpg",
+      contact_info: {
+        phone: "+92 51 8487080",
+        email: "info@insaf.pk",
+        address: "House No. 2, Street 4, Sector J-5, Islamabad"
       },
-      past_party_heads: [
-        {
-          name: "Imran Khan",
-          tenure: "2013 - Present",
-        },
-        {
-          name: "Jahangir Khan Tareen",
-          tenure: "2011 - 2013",
-        },
-      ],
-      seats: {
-        National_assembly: "157",
-        Punjab_Assembly: "182",
-        Sindh_Assembly: "30",
-        KPK_Assembly: "68",
-        Balochistan_Assembly: "9",
-        Gilgit_Baltistan_Assembly: "1",
-        AJK_Assembly: "2",
-      },
-      contact: '+92-51-922-1082',
-      prominentFigures: [
-        {
-          name: "Imran Khan",
-          position: "Prime Minister of Pakistan",
-        },
-        {
-          name: "Jahangir Khan Tareen",
-          position: "Senior PTI Leader",
-        },
-      ],
-      website: 'https://insaf.pk/'
+      party_registration_number: "123456",
+      party_campaign_budget: 10000000, // 10 million PKR
+      party_alliances: {
+        title: "Electoral Alliance",
+        alliancedwith: "MQM, GDA"
+      }
     },
     {
-      name: "Pakistan Muslim League-Nawaz (PML-N)",
-      symbol: "Lion",
+      id: "2",
+      name: "Pakistan Muslim League-Nawaz",
+      acronym: "PML-N",
       leader: "Nawaz Sharif",
-      manifesto: "Empowerment Agenda",
-      founded: "1993",
-      headquarters: "Model Town, Lahore",
-      flags: "Flag of PML-N",
-      colors: {
-        name: "Green and White",
+      foundation_year: 1988,
+      ideology: "Conservatism, Economic Liberalism",
+      headquarters: "Lahore, Pakistan",
+      manifesto: "Sher Ka Pakistan",
+      symbol_url: "https://example.com/pmln-symbol.jpg",
+      contact_info: {
+        phone: "+92 42 99203091",
+        email: "info@pmln.org",
+        address: "House No. 123, Street 456, Model Town, Lahore"
       },
-      past_party_heads: [
-        {
-          name: "Nawaz Sharif",
-          tenure: "1993 - Present",
-        },
-      ],
-      seats: {
-        National_assembly: "84",
-        Punjab_Assembly: "169",
-        Sindh_Assembly: "2",
-        KPK_Assembly: "6",
-        Balochistan_Assembly: "0",
-        Gilgit_Baltistan_Assembly: "0",
-        AJK_Assembly: "6",
-      },
-      contact: '+92-42-111-111-456',
-      prominentFigures: [
-        {
-          name: "Nawaz Sharif",
-          position: "Former Prime Minister of Pakistan",
-        },
-        {
-          name: "Shehbaz Sharif",
-          position: "President of PML-N",
-        },
-      ],
-      website: 'https://pmln.org/'
+      party_registration_number: "654321",
+      party_campaign_budget: 15000000, // 15 million PKR
+      party_alliances: {
+        title: "Electoral Alliance",
+        alliancedwith: "PML-Q, ANP"
+      }
     },
     {
-      name: "Pakistan Peoples Party (PPP)",
-      symbol: "Arrow",
+      id: "3",
+      name: "Pakistan Peoples Party",
+      acronym: "PPP",
       leader: "Bilawal Bhutto Zardari",
-      manifesto: "Bhuttoism",
-      founded: "November 30, 1967",
-      headquarters: "Bilawal House, Karachi",
-      flags: "Flag of PPP",
-      colors: {
-        name: "Red, Black, and White",
+      foundation_year: 1967,
+      ideology: "Social Democracy, Liberalism",
+      headquarters: "Karachi, Pakistan",
+      manifesto: "Roti, Kapra, Makaan",
+      symbol_url: "https://example.com/ppp-symbol.jpg",
+      contact_info: {
+        phone: "+92 21 99251669",
+        email: "info@ppp.org",
+        address: "Bilawal House, Clifton, Karachi"
       },
-      past_party_heads: [
-        {
-          name: "Zulfikar Ali Bhutto",
-          tenure: "1967 - 1979",
-        },
-        {
-          name: "Benazir Bhutto",
-          tenure: "1984 - 2007",
-        },
-      ],
-      seats: {
-        National_assembly: "55",
-        Punjab_Assembly: "7",
-        Sindh_Assembly: "95",
-        KPK_Assembly: "7",
-        Balochistan_Assembly: "0",
-        Gilgit_Baltistan_Assembly: "0",
-        AJK_Assembly: "12",
-      },
-      contact: '+92-21-111-800-727',
-      prominentFigures: [
-        {
-          name: "Bilawal Bhutto Zardari",
-          position: "Chairman of PPP",
-        },
-        {
-          name: "Asif Ali Zardari",
-          position: "Former President of Pakistan",
-        },
-      ],
-      website: 'https://www.ppp.org.pk/'
+      party_registration_number: "789012",
+      party_campaign_budget: 12000000, // 12 million PKR
+      party_alliances: {
+        title: "Electoral Alliance",
+        alliancedwith: "PML-Q, JUI-F"
+      }
     },
     {
-      name: "Muttahida Qaumi Movement-Pakistan (MQM-P)",
-      symbol: "Kite",
+      id: "4",
+      name: "Muttahida Qaumi Movement-Pakistan",
+      acronym: "MQM-P",
       leader: "Khalid Maqbool Siddiqui",
-      manifesto: "Urban Rights",
-      founded: "March 18, 1984",
-      headquarters: "Bahadurabad, Karachi",
-      flags: "Flag of MQM-P",
-      colors: {
-        name: "Red and White",
+      foundation_year: 1984,
+      ideology: "Ethnic Politics, Urban Sindh Rights",
+      headquarters: "Karachi, Pakistan",
+      manifesto: "Empowering the Urban Poor",
+      symbol_url: "https://example.com/mqm-symbol.jpg",
+      contact_info: {
+        phone: "+92 21 36313690",
+        email: "info@mqm.org",
+        address: "90 Azizabad, Karachi"
       },
-      past_party_heads: [
-        {
-          name: "Altaf Hussain",
-          tenure: "1984 - 2017",
-        },
-      ],
-      seats: {
-        National_assembly: "6",
-        Punjab_Assembly: "0",
-        Sindh_Assembly: "20",
-        KPK_Assembly: "0",
-        Balochistan_Assembly: "0",
-        Gilgit_Baltistan_Assembly: "0",
-        AJK_Assembly: "0",
-      },
-      contact: '+92-21-35294700',
-      prominentFigures: [
-        {
-          name: "Khalid Maqbool Siddiqui",
-          position: "Convener of MQM-P",
-        },
-        {
-          name: "Farooq Sattar",
-          position: "Former Convener of MQM-P",
-        },
-      ],
-      website: 'https://www.mqm.org/'
+      party_registration_number: "135792",
+      party_campaign_budget: 8000000, // 8 million PKR
+      party_alliances: {
+        title: "Electoral Alliance",
+        alliancedwith: "PTI, PSP"
+      }
     },
+    {
+      id: "5",
+      name: "Awami National Party",
+      acronym: "ANP",
+      leader: "Asfandyar Wali Khan",
+      foundation_year: 1986,
+      ideology: "Pashtun Nationalism, Secularism",
+      headquarters: "Peshawar, Pakistan",
+      manifesto: "Peace, Democracy, Development",
+      symbol_url: "https://example.com/anp-symbol.jpg",
+      contact_info: {
+        phone: "+92 91 9216436",
+        email: "info@anp.org",
+        address: "Bacha Khan Markaz, Peshawar"
+      },
+      party_registration_number: "246801",
+      party_campaign_budget: 7000000, // 7 million PKR
+      party_alliances: {
+        title: "Electoral Alliance",
+        alliancedwith: "PML-N, JUI-F"
+      }
+    },
+    // Add more political parties with different data
   ];
   

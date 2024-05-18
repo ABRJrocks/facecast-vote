@@ -5,25 +5,9 @@ import { Fragment } from "react";
 import React from "react";
 import { Link } from "react-router-dom";
 
-const menuItems = [
-  {
-    label: "Parties",
-    to: "/parties",
-
-  },
-  {
-    label: "Elections",
-  },
-  {
-    label: "Candidates",
-    to: "/candidates",
-  }
-
-];
-
-const DropDown = ({ title, type }) => {
+const DropDown = ({ title, type, menuItems }) => {
   return (
-    <div className="text-right">
+    <div className="text-right z-0">
       <Menu as="div" className="relative inline-block text-left">
         <div>
           <Menu.Button
@@ -59,15 +43,15 @@ const DropDown = ({ title, type }) => {
             {menuItems.map((item, index) => (
               <Menu.Item key={index}>
                 {({ active }) => (
-                 <Link to={item.to ? item.to : "/"}>
-                   <button
-                    className={`${
-                      active ? "text-regal-blue-800" : "text-black"
-                    } text-regal-blue-900 group flex w-full items-center px-2 py-2 text-sm font-medium`}
-                  >
-                    {item.label}
-                  </button>
-                 </Link>
+                  <Link to={item.to}>
+                    <button
+                      className={`${
+                        active ? "text-regal-blue-800" : "text-black"
+                      } text-regal-blue-900 group flex w-full items-center px-2 py-2 text-sm font-medium`}
+                    >
+                      {item.label}
+                    </button>
+                  </Link>
                 )}
               </Menu.Item>
             ))}

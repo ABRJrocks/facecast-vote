@@ -1,36 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
-} from "react-router-dom";
-import ElectionsScreen from './Screeens/ElectionsScreen';
-import OpenElections from './Screeens/OpenElections';
-import RegisterScreen from './Screeens/RegisterScreen';
-import CandidatesScreen from './Screeens/CandidatesScreen';
-import PartiesScreen from './Screeens/PartiesScreen';
-
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path="/" element={<App />}>
-      <Route index={true} path="/" element={<ElectionsScreen />} />
-      <Route path="/vote" element={<OpenElections />} />
-      <Route path="/register" element={<RegisterScreen />} />
-      <Route path="/candidates" element={<CandidatesScreen />} />
-      <Route path="/parties" element={<PartiesScreen />} />
-    </Route>
-  )
-);
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+// import 'bootstrap/dist/css/bootstrap.min.css';
+import { Provider } from "react-redux";
+import store from "./config/store";
+import "./errHandler";
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-     <RouterProvider router={router} />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>
 );
 
