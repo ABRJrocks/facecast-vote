@@ -29,8 +29,8 @@ const VoteScreen = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [userExists, setUserExists] = useState(false);
   const [message, setMessage] = useState("");
-  const [auth, setAuth] = useState(false);
   const [authError, setAuthError] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const openModal = () => {
     setIsOpen(true);
@@ -45,8 +45,7 @@ const VoteScreen = () => {
       const userData = await faceio.authenticate({
         locale: "auto", // Default user locale
       });
-      console.log("Success, user identified");
-      console.log("userData", userData);
+      console.log("Success, user identified", userData);
       setVerified(true);
       faceio.restartSession();
     } catch (error) {
@@ -58,11 +57,11 @@ const VoteScreen = () => {
   useEffect(() => {
     authenticateUser();
   }, []);
-  let timer;
+
   useEffect(() => {
-    timer = setTimeout(() => {
+    const timer = setTimeout(() => {
       navigate("/voter");
-    }, 60000); // 3 minutes in milliseconds
+    }, 60000); // 1 minute in milliseconds
 
     return () => clearTimeout(timer);
   }, [navigate]);
@@ -97,6 +96,9 @@ const VoteScreen = () => {
         setConstituency(matchingConstituency);
       } catch (error) {
         console.error("Error fetching election:", error);
+        setMessage("Error fetching election details, please try again.");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -136,13 +138,15 @@ const VoteScreen = () => {
         setVoted(ifVoted);
         if (ifVoted) {
           setMessage("You have already voted");
-          clearInterval(timer);
         }
       } catch (error) {
         console.error("Error checking if user voted:", error);
+        setMessage("Error checking vote status, please try again.");
       }
     };
-    checkIfVoted();
+    if (currUser && constituency.const_id && election.id) {
+      checkIfVoted();
+    }
   }, [currUser, constituency, election]);
 
   const handleOtherAuth = () => {
@@ -158,7 +162,7 @@ const VoteScreen = () => {
     } else {
       try {
         if (!voted) {
-          createUserVote({
+          await createUserVote({
             candidate_id: candidateId,
             election_id: election.id,
             user_id: currUser.uid,
@@ -168,16 +172,20 @@ const VoteScreen = () => {
           dispatch(decrementVoteAmount());
           console.log("voted successfully");
           toast.success("Voted Successfully");
+          setVoted(true);
         } else {
           console.log("user has already voted");
         }
       } catch (error) {
         console.log("error", error);
+        toast.error("Error voting, please try again.");
       }
     }
-
-    setVoted(true);
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>

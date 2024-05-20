@@ -6,6 +6,7 @@ import { electionsRef, candidatesRef, partyRef } from "../config/firebase";
 import { generatePDF, generatePDF1 } from "../utils/pdgGen";
 import Select from "react-select";
 import { IoMdArrowDropright } from "react-icons/io";
+import HeroImage from "../assets/HeroImage3.jpg";
 
 const VoterLayout = () => {
   const { currUser } = useAuth();
@@ -117,7 +118,7 @@ const VoterLayout = () => {
               <img
                 class="object-cover object-center rounded"
                 alt="hero"
-                src="https://dummyimage.com/720x600"
+                src={HeroImage}
               />
               {/* <img class="object-cover object-center rounded" alt="hero" src="https://dummyimage.com/720x600"> */}
             </div>

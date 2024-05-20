@@ -10,9 +10,7 @@ import { BsPersonBoundingBox } from "react-icons/bs";
 import { faceio } from "../../config/faceio";
 import { permissionRef } from "../../config/firebase";
 import { getCollectionById } from "../../utils/globals";
-import { FaInfoCircle } from "react-icons/fa";
-import { FaCheck } from "react-icons/fa";
-import { FaTimes } from "react-icons/fa";
+import { FaInfoCircle, FaCheck, FaTimes } from "react-icons/fa";
 import toast from "react-hot-toast";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
@@ -46,10 +44,11 @@ const SignupLayout = () => {
   const [faceData, setFaceData] = useState("");
 
   const [loading, setLoading] = useState(false);
+  const [faceEnrolled, setFaceEnrolled] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  // const [elections, setElections] = useState([]);
+
   useEffect(() => {
     setValidEmail(EMAIL_REGEX.test(email));
   }, [email]);
@@ -69,7 +68,7 @@ const SignupLayout = () => {
       }
     };
     fetchPermissions();
-  }, []);
+  }, [PERMISSIONSID]);
 
   const handleFaceRegister = async () => {
     try {
@@ -79,30 +78,29 @@ const SignupLayout = () => {
           email: email,
         },
       });
-      // .catch((errCode) => {
-      //   handleError(errCode);
-      // });
-
-      console.log(` Unique Facial ID: ${response.facialId}
+      console.log(`Unique Facial ID: ${response.facialId}
       Enrollment Date: ${response.timestamp}
       Gender: ${response.details.gender}
       Age Approximation: ${response.details.age}`);
 
-      console.log(response, "responce face id");
       setFaceData(response);
+      setFaceEnrolled(true);
     } catch (error) {
       console.log(error);
+      setFaceEnrolled(false);
+      setErrorMessage("Face enrollment failed. Please try again.");
     }
   };
+
   const handleProvinceChange = (selectedOption) => {
     setProvince(selectedOption);
-    setCity(""); // Reset city when province changes
-    setArea(""); // Reset area when province changes
+    setCity("");
+    setArea("");
   };
 
   const handleCityChange = (selectedOption) => {
     setCity(selectedOption);
-    setArea(""); // Reset area when city changes
+    setArea("");
   };
 
   const handleAreaChange = (selectedOption) => {
@@ -111,17 +109,19 @@ const SignupLayout = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Set loading to true while sign-up is in progress
-    setErrorMessage(""); // Clear any previous error message
-    setSuccessMessage(""); // Clear any previous success message
+    if (!faceEnrolled) {
+      setErrorMessage("Face enrollment is required to sign up.");
+      return;
+    }
+    setLoading(true);
+    setErrorMessage("");
+    setSuccessMessage("");
 
     try {
       const userCredential = await signUp(email, password);
       const user = userCredential.user;
       if (user) {
-        const userId = user.uid; // This is the unique identifier (ID) of the newly created user
-        console.log("User ID:", userId);
-        // Add user data to Firestore database
+        const userId = user.uid;
         await setDoc(doc(db, "users", userId), {
           email,
           fname,
@@ -138,8 +138,6 @@ const SignupLayout = () => {
         });
         toast.success("User Created Successfully");
 
-        // Clear email and password fields after successful signup
-
         setCninc("");
         setFname("");
         setLname("");
@@ -147,14 +145,10 @@ const SignupLayout = () => {
       }
       setEmail("");
       setPassword("");
-      // Display success message to the user
       setSuccessMessage("Sign-up successful!");
       navigate("/voter");
     } catch (error) {
-      // Handle signup errors
       console.error("Error during sign-up:", error);
-
-      // Check error code and display appropriate error message
       switch (error.code) {
         case "auth/email-already-in-use":
           setErrorMessage(
@@ -166,25 +160,22 @@ const SignupLayout = () => {
             "The password is too weak. Please choose a stronger password."
           );
           break;
-        // Add more cases for other error codes as needed
         default:
           setErrorMessage(
             "An error occurred during sign-up. Please try again later."
           );
           break;
       }
-
-      // You can set error state here if needed
     } finally {
-      setLoading(false); // Set loading to false after sign-up attempt is completed
+      setLoading(false);
     }
   };
 
   return (
     <div>
       <main>
-        <section class="p-6 max-w-2xl mx-auto ">
-          <h2 class="text-2xl font-semibold text-left sm:text-3xl mb-6 text-slate-900">
+        <section className="p-6 max-w-2xl mx-auto ">
+          <h2 className="text-2xl font-semibold text-left sm:text-3xl mb-6 text-slate-900">
             Signup
           </h2>
           {errorMessage && (
@@ -207,11 +198,14 @@ const SignupLayout = () => {
             <form
               action=""
               onSubmit={handleSubmit}
-              class=" mx-auto flex flex-col items-left gap-4"
+              className="mx-auto flex flex-col items-left gap-4"
             >
-              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
                 <div>
-                  <label for="name1" class="text-lg font-normal text-slate-900">
+                  <label
+                    htmlFor="fname"
+                    className="text-lg font-normal text-slate-900"
+                  >
                     First name
                   </label>
                   <input
@@ -220,11 +214,14 @@ const SignupLayout = () => {
                     name="fname"
                     value={fname}
                     onChange={(e) => setFname(e.target.value)}
-                    class="w-full p-1 border border-gray-300 rounded-md"
+                    className="w-full p-1 border border-gray-300 rounded-md"
                   />
                 </div>
                 <div>
-                  <label for="name1" class="text-lg font-normal text-slate-900">
+                  <label
+                    htmlFor="lname"
+                    className="text-lg font-normal text-slate-900"
+                  >
                     Last name
                   </label>
                   <input
@@ -233,12 +230,15 @@ const SignupLayout = () => {
                     name="lname"
                     value={lname}
                     onChange={(e) => setLname(e.target.value)}
-                    class="w-full p-1 border border-gray-300 rounded-md"
+                    className="w-full p-1 border border-gray-300 rounded-md"
                   />
                 </div>
                 <div>
-                  <label for="name1" class="text-lg font-normal text-slate-900">
-                    ID number (cninc)
+                  <label
+                    htmlFor="cnic"
+                    className="text-lg font-normal text-slate-900"
+                  >
+                    ID number (cnic)
                   </label>
                   <input
                     type="number"
@@ -246,11 +246,14 @@ const SignupLayout = () => {
                     name="cnic"
                     value={cnic}
                     onChange={(e) => setCninc(e.target.value)}
-                    class="w-full p-1 border border-gray-300 rounded-md"
+                    className="w-full p-1 border border-gray-300 rounded-md"
                   />
                 </div>
                 <div>
-                  <label for="name1" class="text-lg font-normal text-slate-900">
+                  <label
+                    htmlFor="phone"
+                    className="text-lg font-normal text-slate-900"
+                  >
                     Phone
                   </label>
                   <PhoneInput
@@ -261,7 +264,10 @@ const SignupLayout = () => {
                   />
                 </div>
                 <div>
-                  <label for="name1" class="text-lg font-normal text-slate-900">
+                  <label
+                    htmlFor="province"
+                    className="text-lg font-normal text-slate-900"
+                  >
                     Province
                   </label>
                   <Select
@@ -273,7 +279,10 @@ const SignupLayout = () => {
                 </div>
 
                 <div>
-                  <label for="name1" class="text-lg font-normal text-slate-900">
+                  <label
+                    htmlFor="city"
+                    className="text-lg font-normal text-slate-900"
+                  >
                     City
                   </label>
                   <Select
@@ -305,8 +314,8 @@ const SignupLayout = () => {
                 )}
                 <div>
                   <label
-                    for="name1"
-                    class="text-lg font-normal text-slate-900 flex items-center gap-2"
+                    htmlFor="email"
+                    className="text-lg font-normal text-slate-900 flex items-center gap-2"
                   >
                     Email
                     <span
@@ -326,7 +335,6 @@ const SignupLayout = () => {
                   </label>
                   <input
                     type="email"
-                    //  className="form-control"
                     ref={emailRef}
                     value={email}
                     aria-invalid={validEmail ? "false" : "true"}
@@ -335,7 +343,7 @@ const SignupLayout = () => {
                     placeholder="Please Enter"
                     onBlur={() => setEmailFocus(false)}
                     onFocus={() => setEmailFocus(true)}
-                    class="w-full p-1 border border-gray-300 rounded-md"
+                    className="w-full p-1 border border-gray-300 rounded-md"
                   />
                   <p
                     className={
@@ -351,8 +359,8 @@ const SignupLayout = () => {
 
                 <div>
                   <label
-                    for="password"
-                    class="text-lg font-normal text-slate-900 flex items-center gap-2"
+                    htmlFor="password"
+                    className="text-lg font-normal text-slate-900 flex items-center gap-2"
                   >
                     Password
                     <span
@@ -382,7 +390,7 @@ const SignupLayout = () => {
                     placeholder="Please Enter"
                     onFocus={() => setPasswordFocus(true)}
                     onBlur={() => setPasswordFocus(false)}
-                    class="w-full p-1 border border-gray-300 rounded-md"
+                    className="w-full p-1 border border-gray-300 rounded-md"
                   />
                   <p
                     id="pwdnote"
@@ -416,13 +424,15 @@ const SignupLayout = () => {
                   </div>
                 </div>
               </div>
-              <div class="flex items-center justify-between mt-4">
+              <div className="flex items-center justify-between mt-4">
                 <button
                   type="submit"
-                  class={`bg-regal-blue-700 text-white p-2 px-4 rounded-md w-max text-center ${
-                    loading ? "opacity-50 cursor-not-allowed" : ""
+                  className={`bg-regal-blue-700 text-white p-2 px-4 rounded-md w-max text-center ${
+                    loading || !faceEnrolled
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
                   }`}
-                  disabled={loading}
+                  disabled={loading || !faceEnrolled}
                 >
                   {loading ? "Signing up..." : "Sign up"}
                 </button>
@@ -431,7 +441,7 @@ const SignupLayout = () => {
           ) : (
             <div className="bg-red-200 p-4 flex items-center rounded-md">
               <p className="text-red-800 font-semibold">
-                Registeration is temproarily disabled Come back later
+                Registration is temporarily disabled. Come back later.
               </p>
             </div>
           )}
@@ -440,53 +450,5 @@ const SignupLayout = () => {
     </div>
   );
 };
-
-// function handleError(errCode) {
-//   // Handle error here
-//   // Log all possible error codes during user interaction..
-//   // Refer to: https://faceio.net/integration-guide#error-codes
-//   // for a detailed overview when these errors are triggered.
-//   const fioErrs = faceio.fetchAllErrorCodes();
-//   switch (errCode) {
-//     case fioErrs.PERMISSION_REFUSED:
-//       console.log("Access to the Camera stream was denied by the end user");
-//       break;
-//     case fioErrs.NO_FACES_DETECTED:
-//       console.log(
-//         "No faces were detected during the enroll or authentication process"
-//       );
-//       break;
-//     case fioErrs.UNRECOGNIZED_FACE:
-//       console.log("Unrecognized face on this application's Facial Index");
-//       break;
-//     case fioErrs.MANY_FACES:
-//       console.log("Two or more faces were detected during the scan process");
-//       break;
-//     case fioErrs.FACE_DUPLICATION:
-//       console.log(
-//         "User enrolled previously (facial features already recorded). Cannot enroll again!"
-//       );
-//       break;
-//     case fioErrs.MINORS_NOT_ALLOWED:
-//       console.log("Minors are not allowed to enroll on this application!");
-//       break;
-//     case fioErrs.PAD_ATTACK:
-//       console.log(
-//         "Presentation (Spoof) Attack (PAD) detected during the scan process"
-//       );
-//       break;
-//     case fioErrs.FACE_MISMATCH:
-//       console.log(
-//         "Calculated Facial Vectors of the user being enrolled do not matches"
-//       );
-//       break;
-//     case fioErrs.WRONG_PIN_CODE:
-//       console.log("Wrong PIN code supplied by the user being authenticated");
-//       break;
-//     // ...
-//     // Refer to the boilerplate at: https://gist.github.com/symisc/34203d2811a39f2a871373abc6dd1ce9
-//     // for the list of all possible error codes.
-//   }
-// }
 
 export default SignupLayout;
