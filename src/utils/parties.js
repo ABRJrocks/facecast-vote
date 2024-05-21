@@ -3,6 +3,7 @@ import {
   getCollectionById,
   getCollections,
   updateDocument,
+  deleteDocument,
 } from "./globals";
 import { partyRef } from "../config/firebase";
 
@@ -51,5 +52,20 @@ export const updateParty = async (id, data) => {
     }
   } catch (error) {
     console.error("Error updating document:", error);
+  }
+};
+
+export const deleteParty = async (id) => {
+  try {
+    const isSuccess = await deleteDocument(partyRef, id);
+    if (isSuccess) {
+      alert("Party deleted successfully");
+      return true;
+    } else {
+      console.log("Document delete failed");
+      return false;
+    }
+  } catch (error) {
+    console.error("Error deleting document:", error);
   }
 };

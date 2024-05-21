@@ -1,4 +1,11 @@
-import { getDocs, addDoc, getDoc, doc, updateDoc } from "firebase/firestore";
+import {
+  getDocs,
+  addDoc,
+  getDoc,
+  doc,
+  updateDoc,
+  deleteDoc,
+} from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../config/firebase";
 export const createDocument = async (collectionRef, data) => {
@@ -11,7 +18,6 @@ export const createDocument = async (collectionRef, data) => {
     return null; // Return null or handle errors as needed
   }
 };
-
 
 export const getCollections = async (collectionRef) => {
   try {
@@ -58,7 +64,6 @@ export const updateDocument = async (collectionRef, id, newData) => {
 
 export const uploadImage = async (file, pathPrefix) => {
   try {
-
     const fileName = `${generateUniqueFileName()}_${file.name}`;
 
     // Construct the full path
@@ -74,6 +79,16 @@ export const uploadImage = async (file, pathPrefix) => {
   }
 };
 
+export const deleteDocument = async (collectionRef, id) => {
+  try {
+    const docRef = doc(collectionRef, id);
+    await deleteDoc(docRef);
+    return true;
+  } catch (error) {
+    console.error("Error deleting document:", error);
+    return false;
+  }
+};
 
 const generateUniqueFileName = () => {
   // Generate a random string

@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { useParams } from "react-router-dom";
-import { getCandidatesbyId, updateCandidates } from "../../utils/candidates";
+import { getCandidatesById, updateCandidates } from "../../utils/candidates";
 import { uploadImage } from "../../utils/globals";
 import { fetchSpecificFieldsFromCollectionWithOutFilter } from "../../utils/utilityFunctions";
 import { partyRef } from "../../config/firebase";
@@ -40,7 +39,7 @@ const CandUpdate = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getCandidatesbyId(id);
+        const data = await getCandidatesById(id);
         if (!data) {
           console.log("No Data Found.");
           return;
@@ -133,17 +132,36 @@ const CandUpdate = () => {
 
   return (
     <section>
-      {success && <Alert message={success} type="success" dismissible autoHideDelay={3000} />}
-      {error && <Alert message={error} type="error" dismissible autoHideDelay={3000} />}
-      <h1 className="text-3xl font-semibold text-gray-800 py-6">Update Candidate</h1>
+      {success && (
+        <Alert
+          message={success}
+          type="success"
+          dismissible
+          autoHideDelay={3000}
+        />
+      )}
+      {error && (
+        <Alert message={error} type="error" dismissible autoHideDelay={3000} />
+      )}
+      <h1 className="text-3xl font-semibold text-gray-800 py-6">
+        Update Candidate
+      </h1>
       <hr className="py-4 border-t-2 border-gray-300" />
-      <form onSubmit={handleSubmit} className="mx-auto flex flex-col items-left gap-4">
+      <form
+        onSubmit={handleSubmit}
+        className="mx-auto flex flex-col items-left gap-4"
+      >
         <h3 className="text-xl font-semibold text-gray-800 border-b-2 py-1 border-stone-200">
           Personal Information
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-10">
           <div>
-            <label htmlFor="image" className="text-lg font-normal text-slate-900">Image</label>
+            <label
+              htmlFor="image"
+              className="text-lg font-normal text-slate-900"
+            >
+              Image
+            </label>
             <input
               type="file"
               id="image"
@@ -154,12 +172,23 @@ const CandUpdate = () => {
             />
           </div>
           <div className="h-28 w-28 border-2 border-gray-300 rounded-md">
-            {imageUrl && <img className="rounded-full max-w-28" src={imageUrl} alt="Profile" />}
+            {imageUrl && (
+              <img
+                className="rounded-full max-w-28"
+                src={imageUrl}
+                alt="Profile"
+              />
+            )}
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="name" className="text-lg font-normal text-slate-900">Name</label>
+            <label
+              htmlFor="name"
+              className="text-lg font-normal text-slate-900"
+            >
+              Name
+            </label>
             <input
               type="text"
               id="name"
@@ -170,7 +199,12 @@ const CandUpdate = () => {
             />
           </div>
           <div>
-            <label htmlFor="email" className="text-lg font-normal text-slate-900">Email</label>
+            <label
+              htmlFor="email"
+              className="text-lg font-normal text-slate-900"
+            >
+              Email
+            </label>
             <input
               type="email"
               id="email"
@@ -181,7 +215,12 @@ const CandUpdate = () => {
             />
           </div>
           <div>
-            <label htmlFor="phone" className="text-lg font-normal text-slate-900">Phone Number</label>
+            <label
+              htmlFor="phone"
+              className="text-lg font-normal text-slate-900"
+            >
+              Phone Number
+            </label>
             <input
               type="phone"
               id="phone"
@@ -192,10 +231,17 @@ const CandUpdate = () => {
             />
           </div>
         </div>
-        <h3 className="text-xl font-semibold text-gray-800 border-b-2 py-1 border-stone-200">Address</h3>
+        <h3 className="text-xl font-semibold text-gray-800 border-b-2 py-1 border-stone-200">
+          Address
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="houseNumber" className="text-lg font-normal text-slate-900">House Number</label>
+            <label
+              htmlFor="houseNumber"
+              className="text-lg font-normal text-slate-900"
+            >
+              House Number
+            </label>
             <input
               type="text"
               id="houseNumber"
@@ -206,7 +252,12 @@ const CandUpdate = () => {
             />
           </div>
           <div>
-            <label htmlFor="area" className="text-lg font-normal text-slate-900">Area</label>
+            <label
+              htmlFor="area"
+              className="text-lg font-normal text-slate-900"
+            >
+              Area
+            </label>
             <input
               type="text"
               id="area"
@@ -217,7 +268,12 @@ const CandUpdate = () => {
             />
           </div>
           <div>
-            <label htmlFor="city" className="text-lg font-normal text-slate-900">City</label>
+            <label
+              htmlFor="city"
+              className="text-lg font-normal text-slate-900"
+            >
+              City
+            </label>
             <input
               type="text"
               id="city"
@@ -228,7 +284,12 @@ const CandUpdate = () => {
             />
           </div>
           <div>
-            <label htmlFor="province" className="text-lg font-normal text-slate-900">Province</label>
+            <label
+              htmlFor="province"
+              className="text-lg font-normal text-slate-900"
+            >
+              Province
+            </label>
             <input
               type="text"
               id="province"
@@ -239,13 +300,20 @@ const CandUpdate = () => {
             />
           </div>
         </div>
-        <h3 className="text-xl font-semibold text-gray-800 border-b-2 py-1 border-stone-200">Political Affiliation</h3>
+        <h3 className="text-xl font-semibold text-gray-800 border-b-2 py-1 border-stone-200">
+          Political Affiliation
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="affiliation" className="text-lg font-normal text-slate-900">Affiliation</label>
+            <label
+              htmlFor="affiliation"
+              className="text-lg font-normal text-slate-900"
+            >
+              Affiliation
+            </label>
             <Select
               options={options}
-              value={options.find(option => option.value === affiliation)}
+              value={options.find((option) => option.value === affiliation)}
               onChange={handleAffiliationChange}
               className="relative z-0"
             />
@@ -256,7 +324,9 @@ const CandUpdate = () => {
             className="bg-regal-blue-700 text-white px-3 py-2 drop-shadow-sm rounded-md hover:bg-regal-blue-700/80"
             type="submit"
           >
-            <span className="font-semibold text-base">{loading ? "Loading..." : "Update Candidate"}</span>
+            <span className="font-semibold text-base">
+              {loading ? "Loading..." : "Update Candidate"}
+            </span>
           </button>
         </div>
       </form>

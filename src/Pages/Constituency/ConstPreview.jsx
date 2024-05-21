@@ -4,7 +4,7 @@ import DataLine from "../../Components/DataLine";
 // import { constituencies } from "../../data/const.js";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
-import { getConstituenciesbyId } from "../../utils/constituency.js";
+import { getConstituencyById } from "../../utils/constituency.js";
 
 const ConstPreview = () => {
   const { id } = useParams();
@@ -13,7 +13,7 @@ const ConstPreview = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const constData = await getConstituenciesbyId(id);
+        const constData = await getConstituencyById(id);
         if (!constData) {
           return <div>No Data Found.</div>;
         }
@@ -44,10 +44,7 @@ const ConstPreview = () => {
         </TabList>
 
         <TabPanel>
-          <DataLine
-            title="Registered Voters"
-            value={data.voters || "N/A"}
-          />
+          <DataLine title="Registered Voters" value={data.voters || "N/A"} />
         </TabPanel>
         <TabPanel>
           <h4 className="text-lg font-medium border-b-2 border-gray-300 py-2">
@@ -57,31 +54,19 @@ const ConstPreview = () => {
             <>
               <DataLine
                 title="Young Adults (18yo - 25yo)"
-                value={
-                  data.age_distribution
-                    .young_adults || "N/A"
-                }
+                value={data.age_distribution.young_adults || "N/A"}
               />
               <DataLine
                 title="Adults (26yo - 40yo)"
-                value={
-                  data.age_distribution.adults ||
-                  "N/A"
-                }
+                value={data.age_distribution.adults || "N/A"}
               />
               <DataLine
                 title="Middle Ages (41yo - 60yo)"
-                value={
-                  data.age_distribution.middleaged ||
-                  "N/A"
-                }
+                value={data.age_distribution.middleaged || "N/A"}
               />
               <DataLine
                 title="Seniors (60yo +)"
-                value={
-                  data.age_distribution.seniors ||
-                  "N/A"
-                }
+                value={data.age_distribution.seniors || "N/A"}
               />
             </>
           )}
@@ -92,21 +77,15 @@ const ConstPreview = () => {
           </h4>
           <DataLine
             title="Male"
-            value={
-              data.gender_distribution.male || "N/A"
-            }
+            value={data.gender_distribution.male || "N/A"}
           />
           <DataLine
             title="Female"
-            value={
-              data.gender_distribution.female || "N/A"
-            }
+            value={data.gender_distribution.female || "N/A"}
           />
           <DataLine
             title="Others"
-            value={
-              data.gender_distribution.other || "N/A"
-            }
+            value={data.gender_distribution.other || "N/A"}
           />
         </TabPanel>
         <TabPanel>
@@ -115,24 +94,15 @@ const ConstPreview = () => {
           </h4>
           <DataLine
             title="Primary School"
-            value={
-              data.education_levels.primary_school ||
-              "N/A"
-            }
+            value={data.education_levels.primary_school || "N/A"}
           />
           <DataLine
             title="Secondary School"
-            value={
-              data.education_levels
-                .secondary_school || "N/A"
-            }
+            value={data.education_levels.secondary_school || "N/A"}
           />
           <DataLine
             title="Higher Education"
-            value={
-              data.education_levels
-                .higher_education || "N/A"
-            }
+            value={data.education_levels.higher_education || "N/A"}
           />
         </TabPanel>
       </Tabs>

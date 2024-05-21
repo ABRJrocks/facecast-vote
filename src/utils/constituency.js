@@ -4,6 +4,7 @@ import {
   createDocument,
   getCollections,
   updateDocument,
+  deleteDocument, // Import the delete function from globals
 } from "./globals";
 
 export const createConstituency = async (data) => {
@@ -18,6 +19,7 @@ export const createConstituency = async (data) => {
     console.log(error);
   }
 };
+
 export const getConstituencies = async () => {
   try {
     const collections = await getCollections(constituenciesRef);
@@ -28,7 +30,8 @@ export const getConstituencies = async () => {
   }
 };
 
-export const getConstituenciesbyId = async (id) => {
+export const getConstituencyById = async (id) => {
+  // Corrected function name
   try {
     const documentData = await getCollectionById(constituenciesRef, id);
     console.log("Constituency data by Id:", documentData);
@@ -50,5 +53,20 @@ export const updateConstituency = async (id, newData) => {
     }
   } catch (error) {
     console.error("Error updating document:", error);
+  }
+};
+
+export const deleteConstituency = async (id) => {
+  try {
+    const isSuccess = await deleteDocument(constituenciesRef, id);
+    if (isSuccess) {
+      alert("Constituency deleted successfully");
+      return true;
+    } else {
+      console.log("Document deletion failed");
+      return false;
+    }
+  } catch (error) {
+    console.error("Error deleting document:", error);
   }
 };

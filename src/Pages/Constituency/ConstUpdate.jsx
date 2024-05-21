@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import Select from "react-select";
 import { areas } from "./data";
 import {
-  getConstituenciesbyId,
+  getConstituencyById,
   updateConstituency,
 } from "../../utils/constituency";
 import toast from "react-hot-toast";
@@ -25,7 +25,7 @@ const ConstUpdate = () => {
   useEffect(() => {
     const fetchConstituency = async () => {
       try {
-        const data = await getConstituenciesbyId(id);
+        const data = await getConstituencyById(id);
         if (!data) {
           console.log("No Data Found.");
           return;

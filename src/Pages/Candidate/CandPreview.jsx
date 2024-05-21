@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import Alert from "../../Components/Alert";
-import { getCandidatesbyId } from "../../utils/candidates";
+import { getCandidatesById } from "../../utils/candidates";
 import DataLine from "../../Components/DataLine";
 const CandPreview = () => {
   const { id } = useParams();
@@ -13,7 +13,7 @@ const CandPreview = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const candData = await getCandidatesbyId(id);
+        const candData = await getCandidatesById(id);
         if (!candData) {
           return setError("No Data Found.");
         }
@@ -65,14 +65,17 @@ const CandPreview = () => {
               Overview
             </h4>
 
-            <DataLine title="Affiliation" value={data.affiliation.name || "N/A"} />
-            <div>
-            <img
-              src={data.affiliation.symbol_url}
-              alt={data.name}
-              className="w-16 h-16 rounded-full mr-4"
+            <DataLine
+              title="Affiliation"
+              value={data.affiliation.name || "N/A"}
             />
-          </div>
+            <div>
+              <img
+                src={data.affiliation.symbol_url}
+                alt={data.name}
+                className="w-16 h-16 rounded-full mr-4"
+              />
+            </div>
             <DataLine title="Email" value={data.email || "N/A"} />
             <DataLine title="Phone" value={data.phone || "N/A"} />
             <DataLine

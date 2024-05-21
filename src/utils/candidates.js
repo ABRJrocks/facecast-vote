@@ -4,6 +4,7 @@ import {
   createDocument,
   getCollections,
   updateDocument,
+  deleteDocument, // Ensure you import the deleteDocument function from your globals file
 } from "./globals";
 
 export const createCandidate = async (data) => {
@@ -18,6 +19,7 @@ export const createCandidate = async (data) => {
     console.log(error);
   }
 };
+
 export const getCandidates = async () => {
   try {
     const collections = await getCollections(candidatesRef);
@@ -28,10 +30,10 @@ export const getCandidates = async () => {
   }
 };
 
-export const getCandidatesbyId = async (id) => {
+export const getCandidatesById = async (id) => {
   try {
     const documentData = await getCollectionById(candidatesRef, id);
-    console.log("Constituency data by Id:", documentData);
+    console.log("Candidate data by Id:", documentData);
     return documentData;
   } catch (error) {
     console.error("Error fetching document:", error);
@@ -53,3 +55,18 @@ export const updateCandidates = async (id, newData) => {
   }
 };
 
+// Add the deleteCandidate function here
+export const deleteCandidate = async (id) => {
+  try {
+    const isSuccess = await deleteDocument(candidatesRef, id);
+    if (isSuccess) {
+      alert("Candidate deleted successfully");
+      return true;
+    } else {
+      console.log("Document deletion failed");
+      return false;
+    }
+  } catch (error) {
+    console.error("Error deleting document:", error);
+  }
+};

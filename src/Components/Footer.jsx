@@ -24,7 +24,9 @@ const Footer = () => {
         </div>
       ) : null}
       <div class="w-full bg-black/20 p-4 text-center">
-        <p class="text-xs text-white">&copy; 2024 All rights reserved.</p>
+        <p class="text-xs text-white">
+          &copy; 2024 FaceCast Vote. All rights reserved.
+        </p>
       </div>
     </footer>
   );
