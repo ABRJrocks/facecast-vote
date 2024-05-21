@@ -1,16 +1,12 @@
-// VoteScreen.jsx
 import React, { useEffect, useState } from "react";
 import ElectionsDetails from "../../Components/Utils/ElectionsDetails";
 import ElectionCard from "../../Components/ElectionCard";
-// import { AnnounceResults } from "./AnnounceResult";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { createUserVote, checkIfUserVoted } from "../../utils/userVotes";
 import { getElectiontById } from "../../utils/elections";
 import { useAuth } from "../../context/AuthContext";
 import Alert from "../../Components/Alert";
 import Modal from "./Modal";
-import { faceio } from "../../config/faceio";
 import { useDispatch, useSelector } from "react-redux";
 import { decrementVoteAmount } from "../../config/Slices/walletSlice";
 import toast from "react-hot-toast";
@@ -31,6 +27,7 @@ const VoteScreen = () => {
   const [message, setMessage] = useState("");
   const [authError, setAuthError] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [retry, setRetry] = useState(false); // State to handle retry
 
   const openModal = () => {
     setIsOpen(true);
@@ -40,23 +37,72 @@ const VoteScreen = () => {
     setIsOpen(false);
   };
 
+  const loadFaceIOScript = () => {
+    return new Promise((resolve, reject) => {
+      if (typeof window.faceIO !== "undefined") {
+        console.log("faceIO already loaded");
+        resolve(window.faceIO);
+        return;
+      }
+
+      const existingScript = document.getElementById("faceio-script");
+      if (existingScript) {
+        existingScript.onload = () => {
+          console.log("faceIO script loaded");
+          resolve(window.faceIO);
+        };
+        existingScript.onerror = () => {
+          console.error("Failed to load FaceIO script");
+          reject(new Error("Failed to load FaceIO script"));
+        };
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.id = "faceio-script";
+      script.src = "https://cdn.faceio.net/fio.js";
+      script.async = true;
+      script.onload = () => {
+        console.log("faceIO script loaded");
+        if (typeof window.faceIO !== "undefined") {
+          resolve(window.faceIO);
+        } else {
+          reject(new Error("faceIO is not defined after script load"));
+        }
+      };
+      script.onerror = () => {
+        console.error("Failed to load FaceIO script");
+        reject(new Error("Failed to load FaceIO script"));
+      };
+      document.body.appendChild(script);
+    });
+  };
+
   const authenticateUser = async () => {
+    setAuthError(false);
+    setRetry(false);
     try {
-      const userData = await faceio.authenticate({
-        locale: "auto", // Default user locale
-      });
+      const faceIO = await loadFaceIOScript();
+      if (!faceIO) {
+        throw new Error("faceIO is undefined after loading the script");
+      }
+      const userData = await faceIO.authenticate({ locale: "auto" });
       console.log("Success, user identified", userData);
       setVerified(true);
-      faceio.restartSession();
+      faceIO.restartSession();
     } catch (error) {
       console.error("Error authenticating user:", error);
       setAuthError(true); // Set authentication error flag
+      toast.error("Authentication failed. Please try again.");
+      setRetry(true); // Enable retry option
     }
   };
 
   useEffect(() => {
-    authenticateUser();
-  }, []);
+    if (!verified) {
+      authenticateUser();
+    }
+  }, [retry]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -245,8 +291,11 @@ const VoteScreen = () => {
       ) : (
         <div className="bg-red-200 p-4 flex items-center rounded-md my-5">
           <p className="text-red-950 font-semibold">
-            Auth failed try again later
+            Auth failed. Please try again.
           </p>
+          <button className="mx-2" onClick={() => setRetry((prev) => !prev)}>
+            Retry Authentication
+          </button>
           <button className="mx-2" onClick={handleOtherAuth}>
             Other method
           </button>

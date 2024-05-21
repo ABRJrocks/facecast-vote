@@ -5,7 +5,6 @@ import { electionsRef, resultsRef, userVoteRef } from "../../config/firebase";
 import { query, where, getDocs } from "firebase/firestore";
 import CountdownTimer from "../CountdownTimer";
 
-
 const getVotesByconstituency = async (
   constituency_id,
   election_id,
@@ -38,85 +37,79 @@ const ElectionsDetails = ({ title, end, electionType, id }) => {
   const [candidates, setCandidates] = useState([]);
 
   const announceResultst = async () => {
-    console.log("Time's up!");
-    console.log("ID!", id);
-    if (!id) {
-      return;
-    }
-    //get election details
-    const election = await getCollectionById(electionsRef, id);
-    if (!election) {
-      return;
-    }
-    // const electionid = election.id;
-    // console.log("Election details", election);
-    const fetchedConstituencies = election.constituencies;
-    const fetchedCandidates = [];
-
-    // Loop through constituencies and candidates and push them into the arrays
-    fetchedConstituencies.forEach((constituency) => {
-      if (constituency.candidates && Array.isArray(constituency.candidates)) {
-        fetchedCandidates.push(...constituency.candidates);
+    try {
+      console.log("Time's up!");
+      console.log("ID!", id);
+      if (!id) {
+        throw new Error("Election ID is missing");
       }
-    });
-    // console.log("Constituencies", fetchedConstituencies);
-    // console.log("Candidates", fetchedCandidates);
-    setConstituencies(fetchedConstituencies);
-    setCandidates(fetchedCandidates);
 
-    const resultData = {
-      electionTitle: election.title,
-      totalVotes: 0,
-      electionID: id,
-      constituencies: [],
-    };
+      const election = await getCollectionById(electionsRef, id);
+      if (!election) {
+        throw new Error("Election details not found");
+      }
 
-    for (const constituency of fetchedConstituencies) {
-      const constituencyData = {
-        name: constituency.name,
-        id: constituency.const_id,
-        candidates: [],
-      };
-      for (const candidate of fetchedCandidates) {
-        // console.log("Candidate", candidate.id);
-        // console.log("Constituency", constituency.const_id);
-        const votes = await getVotesByconstituency(
-          constituency.const_id,
-          id,
-          candidate.id
-        );
-        // console.log("Votes", votes);
-        const candidateData = {
-          name: candidate.name,
-          id: candidate.id,
-          votes: votes ? votes.length : 0, // Check if votes exist and get the length
-        };
-        constituencyData.candidates.push(candidateData);
-        if (votes) {
-          resultData.totalVotes += votes.length;
+      const fetchedConstituencies = election.constituencies;
+      const fetchedCandidates = [];
+
+      fetchedConstituencies.forEach((constituency) => {
+        if (constituency.candidates && Array.isArray(constituency.candidates)) {
+          fetchedCandidates.push(...constituency.candidates);
         }
+      });
+
+      setConstituencies(fetchedConstituencies);
+      setCandidates(fetchedCandidates);
+
+      const resultData = {
+        electionTitle: election.title,
+        totalVotes: 0,
+        electionID: id,
+        constituencies: [],
+      };
+
+      for (const constituency of fetchedConstituencies) {
+        const constituencyData = {
+          name: constituency.name,
+          id: constituency.const_id,
+          candidates: [],
+        };
+        for (const candidate of fetchedCandidates) {
+          const votes = await getVotesByconstituency(
+            constituency.const_id,
+            id,
+            candidate.id
+          );
+          const candidateData = {
+            name: candidate.name,
+            id: candidate.id,
+            votes: votes ? votes.length : 0,
+          };
+          constituencyData.candidates.push(candidateData);
+          if (votes) {
+            resultData.totalVotes += votes.length;
+          }
+        }
+        resultData.constituencies.push(constituencyData);
       }
-      resultData.constituencies.push(constituencyData);
-    }
-    // console.log("Result Data", resultData);
 
-    // inserting data to result collection
+      console.log("Result Data: ", JSON.stringify(resultData, null, 2));
 
-    const resultRef = await createDocument(resultsRef, resultData);
-    if (resultRef) {
-      console.log("Results saved successfully");
-    } else {
-      console.log("Error saving results");
+      const resultRef = await createDocument(resultsRef, resultData);
+      if (resultRef) {
+        console.log("Results saved successfully");
+      } else {
+        throw new Error("Error saving results");
+      }
+    } catch (error) {
+      console.error("announceResultst error:", error.message);
     }
   };
-
-  
 
   return (
     <div className="border-b border-b-stone-300 mb-0">
       <div className="flex justify-between items-center pt-4">
         <div className="flex flex-col gap-2 items-start">
-         
           <h2 className="md:text-2xl md:font-semibold text-xl font-bold">
             {title}
           </h2>

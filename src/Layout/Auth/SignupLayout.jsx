@@ -70,6 +70,30 @@ const SignupLayout = () => {
     fetchPermissions();
   }, [PERMISSIONSID]);
 
+  const isValidCNIC = (cnic) => {
+    // CNIC should be 13 digits long
+    if (cnic.length !== 13) {
+      return false;
+    }
+
+    // CNIC should contain only numbers
+    if (!/^\d+$/.test(cnic)) {
+      return false;
+    }
+
+    // Other CNIC validation rules specific to Pakistani CNIC can be added here
+
+    return true;
+  };
+
+  const isValidField = (field) => {
+    // Check if the field is a string before calling trim
+    if (typeof field === "string") {
+      return field.trim() !== "";
+    }
+    return false;
+  };
+
   const handleFaceRegister = async () => {
     try {
       let response = await faceio.enroll({
@@ -109,10 +133,29 @@ const SignupLayout = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!isValidCNIC(cnic)) {
+      setErrorMessage("Please enter a valid CNIC.");
+      return;
+    }
+
+    if (
+      !isValidField(fname) ||
+      !isValidField(lname) ||
+      !isValidField(phone) ||
+      !isValidField(province) ||
+      !isValidField(city) ||
+      !isValidField(area)
+    ) {
+      setErrorMessage("Please fill out all required fields.");
+      return;
+    }
+
     if (!faceEnrolled) {
       setErrorMessage("Face enrollment is required to sign up.");
       return;
     }
+
     setLoading(true);
     setErrorMessage("");
     setSuccessMessage("");
